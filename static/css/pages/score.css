@@ -246,7 +246,7 @@ a:hover {
     justify-content: center;
     align-items: center;
     overflow-wrap: break-word;
-    margin-right: 3px;
+    margin-right: 5px !important;
   }
 
   /* score info block */

@@ -64,7 +64,7 @@
         <!-- User Card -->
         <div class="user-card" style="background-image: {{ user['banner'] }}">
             <div class="user-card-avatar">
-                <img src="https://a.seventwentyseven.tk/{{ user['id'] }}" class="user-card-avatar-image">
+                <img src="https://a.seventwentyseven.tk/{{ user['id'] }}" class="user-card-avatar-image" onError="this.src='/static/images/avatar_notwork.png';">
             </div>
             <div class="user-card-username">
                 <a href="https://seventwentyseven.tk/u/{{ user['id'] }}" class="username-link">
