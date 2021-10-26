@@ -50,6 +50,7 @@
             {% if session.authenticated %}
             <div class="navbar-item has-dropdown is-hoverable">
                 <a class="navbar-link">
+					<img src="https://a.seventwentyseven.tk/{{ session.user_data['id'] }}" style="height: 100%; margin-right: 7px; border-radius: 9001px;">
                     {{ session.user_data['name'] }}
                 </a>
                 <div class="navbar-dropdown">

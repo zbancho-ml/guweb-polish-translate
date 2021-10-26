@@ -1,0 +1,503 @@
+{% extends 'base.html' %}
+{% block title %} Score {% endblock %}
+
+{% block header %}
+<script src="/static/js/asserts/vue.js"></script>
+<script src="/static/js/asserts/vue-axios.js"></script>
+
+<script>
+    var mode = "{{ mode }}";
+    var mods = "{{ mods }}";
+    var sort = "{{ sort }}";
+    var domain = "{{ domain() }}";
+</script>
+
+<link rel="stylesheet" href="/static/css/pages/score.css">
+{% endblock %}
+
+{% block content %}
+<div id="app" :class="(load ? 'load' : '')">
+    <!-- Header -->
+    <div class="main-banner">
+        <div class="header-text">
+            <span style="font-size: 19px; font-weight: 400;">{{ map_info['title'] }}</span> by <span style="font-size: 16px; font-weight: 400;">{{ map_info['artist'] }}</span><br>
+            <!-- Mode Icon -->
+            {% if score['mode'] == 0 %}
+                <i class="mode-icon mode-osu"></i>
+            {% elif score['mode'] == 1 %}
+                <i class="mode-icon mode-taiko"></i>
+            {% elif score['mode'] == 2 %}
+                <i class="mode-icon mode-catch"></i>
+            {% elif score['mode'] == 3 %}
+                <i class="mode-icon mode-mania"></i>
+            {% endif %}
+            <span style="background-color: #22282a; border-radius: 99999px; padding: 2px 8px; font-size: 12px"><i class="fas fa-star fa-xs" style="color: #def750;"></i> {{ map_info['diff'] }}</span>
+            <span style="font-weight: 400; font-size: 17px;">{{ map_info['diffname'] }}</span> mapped by <span style="font-weight: 400">{{ map_info['creator'] }}</span>
+
+        </div>
+    </div>
+
+    <!-- Score Banner -->
+    <div class="score-banner" style="background-image: {{ map_info['banner_link'] }}">
+        <div class="score-banner-grade">
+            <span style="text-shadow: 0 0 10px {{ grade_shadow }};">{{score['grade'] }}</span>
+        </div>
+        <div class="score-banner-score">
+            {{ score['score'] }}
+        </div>
+        <div class="score-banner-scoreinfo">
+            Played by <strong>{{ user['name'] }}</strong>
+            Submitted on <strong>{{ score['play_time'] }}</strong>
+            {% if score['mods'] != 0 %}
+            With <strong>{{ score['mods'] }}</strong>
+            {% endif %}
+        </div>
+        <div class="score-banner-replaydownload">
+            <button type="button" class="replay-download-button" onclick=" window.open('https://osu.seventwentyseven.tk/api/get_replay?id={{ score['id'] }}','_blank')">
+                Download Replay
+            </button>
+        </div>
+    </div>
+
+    <!-- Main block -->
+    <div class="main-block">
+        <!-- User Card -->
+        <div class="user-card" style="background-image: {{ user['banner'] }}">
+            <div class="user-card-avatar">
+                <img src="https://a.seventwentyseven.tk/{{ user['id'] }}" class="user-card-avatar-image">
+            </div>
+            <div class="user-card-username">
+                <a href="https://seventwentyseven.tk/u/{{ user['id'] }}" class="username-link">
+                    <img src="https://seventwentyseven.tk/static/images/flags/{{ user['country'] }}.png" class="profile-flag">
+                    {{ user['name'] }}
+                </a>
+            </div>
+            <div class="user-card-badges">
+                {% for el in group_list %}
+                <span class="is-badge" style="color:{{ el[1] }} !important;">
+                    {{ el[0] }}
+                </span>
+                {% endfor %}
+            </div>
+            <div class="user-card-status">
+                <i class="fas fa-circle" style="color: {{ player_status[0] }}"></i>
+            </div>
+            <div class="user-card-status-text">
+                {{ player_status[1] }}
+            </div>
+        </div>
+
+        <!-- Score info -->
+        <div class="score-information">
+            <!-- Standard -->
+            {% if score['mode'] == 0 %}
+                <style>
+                    .score-information-block {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr 1fr 1fr;
+                        grid-template-rows: 1fr 1fr;
+                        gap: 5px 5px;
+                        grid-auto-flow: row;
+                        grid-template-areas:
+                          "score-information-top score-information-top score-information-top score-information-top"
+                          "s300 s100 s50 miss";
+                        max-height: 150px !important;
+                        height: 150px;
+                        width: 300px;
+                      }
+                      
+                      .score-information-top { grid-area: score-information-top; }
+                      
+                      .s300 { grid-area: s300; }
+                      
+                      .s100 { grid-area: s100; }
+                      
+                      .s50 { grid-area: s50; }
+                      
+                      .miss { grid-area: miss; }
+
+                      .score-information-top {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr 1fr;
+                        grid-template-rows: 1fr;
+                        gap: 5px 5px;
+                        grid-auto-flow: row;
+                        grid-template-areas:
+                          "acc max-combo pp";
+                      }
+                      
+                      .acc { grid-area: acc; }
+                      
+                      .max-combo { grid-area: max-combo; }
+                      
+                      .pp { grid-area: pp; }
+                      
+                      
+                </style>
+                <div class="score-information-block">
+                    <div class="score-information-top">
+                        <div class="acc">
+                            <div class="stat-header">
+                                ACCURACY
+                            </div>
+                            <div class="stat-value">
+                                {{ score['acc'] }}%
+                            </div>
+                        </div>
+                        <div class="max-combo">
+                            <div class="stat-header">
+                                MAX COMBO
+                            </div>
+                            {% if mode != 3 and score['max_combo'] >= map_info['max_combo'] %}
+                            <div class="stat-value" style="color: #b3ff66 !important;">
+                                {{ score['max_combo']}}  
+                            </div>
+                            {% else %}
+                            <div class="stat-value">
+                                {{ score['max_combo']}}  
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="pp">
+                            <div class="stat-header">
+                                pp
+                            </div>
+                            <div class="stat-value">
+                                {{ score['pp'] }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="s300">
+                        <div class="stat-header">
+                            300
+                        </div>
+                        <div class="stat-value">
+                            {{ score['n300'] }}
+                        </div>
+                    </div>
+                    <div class="s100">
+                        <div class="stat-header">
+                            100
+                        </div>
+                        <div class="stat-value">
+                            {{ score['n100'] }}
+                        </div>
+                    </div>
+                    <div class="s50">
+                        <div class="stat-header">
+                            50
+                        </div>
+                        <div class="stat-value">
+                            {{ score['n50'] }}
+                        </div>
+                    </div>
+                    <div class="miss">
+                        <div class="stat-header">
+                            MISS
+                        </div>
+                        <div class="stat-value">
+                            {{ score['nmiss'] }}
+                        </div>
+                    </div>
+                </div>
+            {% elif score['mode'] == 1 %}
+            <!-- Taiko -->
+            <style>
+                .score-information-block1 {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr;
+                    grid-template-rows: 1fr 1fr;
+                    gap: 5px 5px;
+                    grid-auto-flow: row;
+                    grid-template-areas:
+                      "acc max-combo pp"
+                      "n300 n50 nmiss";
+                    max-height: 150px !important;
+                    height: 150px;
+                    width: 300px;
+                  }
+                  
+                  .acc { grid-area: acc; }
+                  
+                  .max-combo { grid-area: max-combo; }
+                  
+                  .pp { grid-area: pp; }
+                  
+                  .n300 { grid-area: n300; }
+                  
+                  .n50 { grid-area: n50; }
+                  
+                  .nmiss { grid-area: nmiss; }
+                  
+            </style>
+            <div class="score-information-block1">
+                <div class="acc">
+                    <div class="stat-header">
+                        ACCURACY
+                    </div>
+                    <div class="stat-value">
+                        {{ score['acc'] }}%
+                    </div>
+                </div>
+                <div class="max-combo">
+                    <div class="stat-header">
+                        MAX COMBO
+                    </div>
+                    {% if mode != 3 and score['max_combo'] >= map_info['max_combo'] %}
+                    <div class="stat-value" style="color: #b3ff66 !important;">
+                        {{ score['max_combo']}}  
+                    </div>
+                    {% else %}
+                    <div class="stat-value">
+                        {{ score['max_combo']}}  
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="pp">
+                    <div class="stat-header">
+                        pp
+                    </div>
+                    <div class="stat-value">
+                        {{ score['pp'] }}
+                    </div>
+                </div>
+                <div class="n300">
+                    <div class="stat-header">
+                        300
+                    </div>
+                    <div class="stat-value">
+                        {{ score['n300'] }}
+                    </div>
+                </div>
+                <div class="n50">
+                    <div class="stat-header">
+                        50
+                    </div>
+                    <div class="stat-value">
+                        {{ score['n50'] }}
+                    </div>
+                </div>
+                <div class="nmiss">
+                    <div class="stat-header">
+                        MISS
+                    </div>
+                    <div class="stat-value">
+                        {{ score['nmiss'] }}
+                    </div>
+                </div>
+              </div>
+            {% elif score['mode'] == 2 %}
+            <!-- Catch -->
+            <style>
+                .score-information-block {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr 1fr;
+                    grid-template-rows: 1fr 1fr;
+                    gap: 5px 5px;
+                    grid-auto-flow: row;
+                    grid-template-areas:
+                      "score-information-top score-information-top score-information-top score-information-top"
+                      "s300 s100 s50 miss";
+                    max-height: 150px !important;
+                    height: 150px;
+                    width: 300px;
+                  }
+                  
+                  .score-information-top { grid-area: score-information-top; }
+                  
+                  .s300 { grid-area: s300; }
+                  
+                  .s100 { grid-area: s100; }
+                  
+                  .s50 { grid-area: s50; }
+                  
+                  .miss { grid-area: miss; }
+
+                  .score-information-top {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr;
+                    grid-template-rows: 1fr;
+                    gap: 5px 5px;
+                    grid-auto-flow: row;
+                    grid-template-areas:
+                      "acc max-combo pp";
+                  }
+                  
+                  .acc { grid-area: acc; }
+                  
+                  .max-combo { grid-area: max-combo; }
+                  
+                  .pp { grid-area: pp; }
+                  
+                  
+            </style>
+            <div class="score-information-block">
+                <div class="score-information-top">
+                    <div class="acc">
+                        <div class="stat-header">
+                            ACCURACY
+                        </div>
+                        <div class="stat-value">
+                            {{ score['acc'] }}%
+                        </div>
+                    </div>
+                    <div class="max-combo">
+                        <div class="stat-header">
+                            MAX COMBO
+                        </div>
+                        {% if mode != 3 and score['max_combo'] >= map_info['max_combo'] %}
+                        <div class="stat-value" style="color: #b3ff66 !important;">
+                            {{ score['max_combo']}}  
+                        </div>
+                        {% else %}
+                        <div class="stat-value">
+                            {{ score['max_combo']}}  
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="pp">
+                        <div class="stat-header">
+                            pp
+                        </div>
+                        <div class="stat-value">
+                            {{ score['pp'] }}
+                        </div>
+                    </div>
+                </div>
+                <div class="s300">
+                    <div class="stat-header">
+                        300
+                    </div>
+                    <div class="stat-value">
+                        {{ score['n300'] }}
+                    </div>
+                </div>
+                <div class="s100">
+                    <div class="stat-header">
+                        100
+                    </div>
+                    <div class="stat-value">
+                        {{ score['n100'] }}
+                    </div>
+                </div>
+                <div class="s50">
+                    <div class="stat-header">
+                        50
+                    </div>
+                    <div class="stat-value">
+                        {{ score['n50'] }}
+                    </div>
+                </div>
+                <div class="miss">
+                    <div class="stat-header">
+                        MISS
+                    </div>
+                    <div class="stat-value">
+                        {{ score['nmiss'] }}
+                    </div>
+                </div>
+            </div>
+            {% elif score['mode'] == 3 %}
+            <!-- Mania -->
+            <style>
+                .score-information-block1 {
+                    display: grid; 
+                    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr; 
+                    grid-template-rows: 1fr 1fr; 
+                    gap: 5px 5px; 
+                    grid-template-areas: 
+                      "acc acc combo combo pp pp"
+                      "max s300 s200 s100 s50 smiss";
+                    max-height: 150px !important;
+                    height: 150px;
+                    width: 90%
+                  }
+                  .acc { grid-area: acc; }
+                  .combo { grid-area: combo; }
+                  .pp { grid-area: pp; }
+                  .max { grid-area: max; }
+                  .s300 { grid-area: s300; }
+                  .s200 { grid-area: s200; }
+                  .s100 { grid-area: s100; }
+                  .s50 { grid-area: s50; }
+                  .smiss { grid-area: smiss; }
+            </style>
+            <div class="score-information-block1">
+                <div class="acc">
+                    <div class="stat-header">
+                        ACCURACY
+                    </div>
+                    <div class="stat-value">
+                        {{ score['acc'] }}
+                    </div>
+                </div>
+                <div class="combo">
+                    <div class="stat-header">
+                        MAX COMBO
+                    </div>
+                    <div class="stat-value">
+                        {{ score['max_combo'] }}
+                    </div>
+                </div>
+                <div class="pp">
+                    <div class="stat-header">
+                        pp
+                    </div>
+                    <div class="stat-value">
+                        {{ score['pp'] }}
+                    </div>
+                </div>
+                <div class="max">
+                    <div class="stat-header">
+                        MAX
+                    </div>
+                    <div class="stat-value">
+                        {{ score['ngeki'] }}
+                    </div>
+                </div>
+                <div class="s300">
+                    <div class="stat-header">
+                        300
+                    </div>
+                    <div class="stat-value">
+                        {{ score['n300'] }}
+                    </div>
+                </div>
+                <div class="s200">
+                    <div class="stat-header">
+                        200
+                    </div>
+                    <div class="stat-value">
+                        {{ score['nkatu'] }}
+                    </div>
+                </div>
+                <div class="s100">
+                    <div class="stat-header">
+                        100
+                    </div>
+                    <div class="stat-value">
+                        {{ score['n100'] }}
+                    </div>
+                </div>
+                <div class="s50">
+                    <div class="stat-header">
+                        50
+                    </div>
+                    <div class="stat-value">
+                        {{ score['n50'] }}
+                    </div>
+                </div>
+                <div class="smiss">
+                    <div class="stat-header">
+                        MISS
+                    </div>
+                    <div class="stat-value">
+                        {{ score['nmiss'] }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+<script src="/static/js/asserts/vue-flags.js"></script>
+{% endblock %}

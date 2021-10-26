@@ -730,3 +730,19 @@ span.beatmap-mapper {
   transition: 0.2s ease;
   margin-bottom: 12px;
 }
+
+/* stolen from sakuru */
+.is-badge {
+  display: inline-block;
+  background: white;
+  border-radius: 9001px;
+  justify-content: center;
+  padding-bottom: calc(.4em - 1px);
+  padding-left: 0.8em;
+  padding-right: 0.8em;
+  padding-top: calc(.4em - 1px);
+  text-align: center;
+  white-space: nowrap;
+  margin-right: 2px;
+  font-weight: 400;
+}

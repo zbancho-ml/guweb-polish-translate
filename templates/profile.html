@@ -19,7 +19,18 @@
                     </div>
                     <div class="map-title-block">
                         <div class="map-title">
-                            <a class="beatmap-link">
+                            <script>
+                                if (map.mods & 7) {
+                                    mods = "rx"
+                                }
+                                else if (map.mods & 13) {
+                                    mods = "ap"
+                                }
+                                else {
+                                    mods = "vn"
+                                }
+                            </script>
+                            <a class="beatmap-link" v-bind:href="'https://seventwentyseven.tk/score/' + map.id + '/' + mods">
                                 <% map.beatmap.artist %> - <% map.beatmap.title %> [<% map.beatmap.version %>] <!--<span v-if="map.mods != 0">+ <% modsStr(map.mods) %></span>-->
                             </a>
                         </div>
@@ -201,9 +212,9 @@
                 </div>
             </div>
             <div class="bar-selection badge-selects">
-                <span>
-                    Badges not yet implemented!
-                </span>
+                {% for el in group_list %}
+                    <span class="is-badge" style="color: {{ el[2] }};"><i class="fas fa-{{ el[0] }}"></i> {{ el[1] }}</span>
+                {% endfor %}
             </div>
         </div>
     </div>
