@@ -229,6 +229,13 @@ async def settings_avatar_post():
 @frontend.route('/settings/custom')
 @login_required
 async def settings_custom():
+    user = await glob.db.fetch('SELECT priv FROM users WHERE id=%s', session['user_data']['id'])
+    user_priv = Privileges(int(user['priv']))
+    if Privileges.Supporter in user_priv or Privileges.Mod in user_priv or Privileges.Nominator in user_priv or Privileges.Admin in user_priv or Privileges.Premium in user_priv:
+        pass
+    else:
+        return await flash('error', 'You must be supporter or staff to change your background and banner!', 'settings/profile')
+
     profile_customizations = utils.has_profile_customizations(session['user_data']['id'])
     return await render_template('settings/custom.html', customizations=profile_customizations)
 
