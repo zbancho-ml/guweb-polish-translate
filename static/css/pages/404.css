@@ -5,12 +5,15 @@
 
     background-color: hsl(var(--main),10%,15%);
     color: #fff;
+    border-radius: 16px;
+    margin-top: 10%;
+
 }
 
 .title-block {
     height: auto;
     width: auto;
-    padding: 38px 22px 10px 22px;
+    padding: 25px 22px 10px 22px;
     background-color: hsl(var(--main), 30%, 50%);
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;

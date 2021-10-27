@@ -33,6 +33,8 @@
   background: hsl(var(--main), 30%, 50%);
   position: relative;
   overflow: hidden;
+  background-position-y: 50% !important;
+  background-position-x: 50% !important;
 }
 
 .profile-avatar {

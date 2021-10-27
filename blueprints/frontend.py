@@ -242,6 +242,12 @@ async def settings_custom():
 @frontend.route('/settings/custom', methods=['POST'])
 @login_required
 async def settings_custom_post():
+    user = await glob.db.fetch('SELECT priv FROM users WHERE id=%s', session['user_data']['id'])
+    user_priv = Privileges(int(user['priv']))
+    if Privileges.Supporter in user_priv or Privileges.Mod in user_priv or Privileges.Nominator in user_priv or Privileges.Admin in user_priv or Privileges.Premium in user_priv:
+        pass
+    else:
+        return await flash('error', 'You must be supporter or staff to change your background and banner!', 'settings/profile')
     files = await request.files
     banner = files.get('banner')
     background = files.get('background')
@@ -367,7 +373,6 @@ async def settings_password_post():
 
 @frontend.route('/u/<id>')
 async def profile_select(id):
-
     mode = request.args.get('mode', 'std', type=str) # 1. key 2. default value
     mods = request.args.get('mods', 'vn', type=str)
     user_data = await glob.db.fetch(
@@ -376,12 +381,6 @@ async def profile_select(id):
         'WHERE safe_name IN (%s) OR id IN (%s) LIMIT 1',
         [id, utils.get_safe_name(id)]
     )
-    if int(user_data['clan_id']) != 0:
-        clan = await glob.db.fetch("SELECT tag FROM clans WHERE id=%s", user_data['clan_id'])
-        clan['tag'] = f"[{clan['tag']}] "
-    else:
-        clan = {}
-        clan['tag'] = ""
     # no user
     if not user_data:
         return (await render_template('404.html'), 404)
@@ -396,6 +395,13 @@ async def profile_select(id):
     is_staff = 'authenticated' in session and (Privileges.Admin in Privileges(int(session['user_data']['priv'])))
     if not user_data or not (user_data['priv'] & Privileges.Normal or is_staff):
         return (await render_template('404.html'), 404)
+    #Get clan (and life)
+    if int(user_data['clan_id']) != 0:
+        clan = await glob.db.fetch("SELECT tag FROM clans WHERE id=%s", user_data['clan_id'])
+        clan['tag'] = f"[{clan['tag']}] "
+    else:
+        clan = {}
+        clan['tag'] = ""
 
     group_list = []
     user_priv = Privileges(int(user_data['priv']))
