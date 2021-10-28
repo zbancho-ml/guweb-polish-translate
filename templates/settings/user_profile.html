@@ -36,64 +36,26 @@
   <div class="block-content right">
     <div id="general" class="single-right-block">
       <div class="right-block-header">
-        User Infomation
+        User Profile Customisation
       </div>
       <form action="/settings/profile" method="post" class="setting-block-content">
         <div class="single-block-content">
           <div class="block-content--left">
             <div class="field-label is-normal">
-              <label class="label">Username</label>
+              <label class="label">About Me</label>
             </div>
           </div>
           <div class="block-content--right">
             <div class="field-body">
               <div class="field">
                 <p class="control">
-                  <input class="input" type="text" name="username"
-                  value="{{ session.user_data['name'] }}" {% if not session.user_data['is_donator'] %}readonly{% endif %}>
+                    <textarea class="textarea" placeholder="What are you doing etc." name="about_me_content">{{ about_me_content }}</textarea>
                 </p>
               </div>
             </div>
           </div>
         </div>
-        <div class="single-block-content">
-          <div class="block-content--left">
-            <div class="field-label is-normal">
-              <label class="label">Email</label>
-            </div>
-          </div>
-          <div class="block-content--right">
-            <div class="field-body">
-              <div class="field">
-                <p class="control">
-                  <input class="input" type="email" name="email" value="{{ session.user_data['email'] }}">
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Disabled - Username AKA doesn't exist in gulag? (for now?)
-        <div class="single-block-content">
-          <div class="block-content--left">
-            <div class="field-label is-normal">
-              <label class="label">name aka</label>
-            </div>
-          </div>
-          <div class="block-content--right">
-            <div class="field-body">
-              <div class="field">
-                <p class="control">
-                  <input class="input" type="aka" value="">
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        -->
         <button class='button is-primary' type='submit'><span>Save</span><span class='icon is-small'><i class='fas fa-check'></i></span></button>
-        <span style="background-color: hsla(var(--main), 10%, 10%); border-radius: 9001px; padding: 15px; width: 95%; margin-top: 50px;">
-          Note: Changing username on your own isn't possible at the moment. If you have supporter please contact staff if you want to change it.
-        </span>
       </form>
     </div>
   </div>

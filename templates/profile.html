@@ -1,11 +1,26 @@
 {% extends 'base.html' %}
 {% block title %} Profile {% endblock %}
 
+{% if about_me['content'] != False %}
+{% macro abtme(title) %}
+<div class="log-block">
+    <div class="header">
+        <div class="title">
+            <i class="fas fa-id-card"></i>   {{ title }}
+        </div>
+    </div>
+    <div class="scores">
+       {{ about_me['content'] }}
+    </div>
+</div>
+{% endmacro %}
+{% endif %}
+
 {% macro scores(title, id) %}
 <div class="log-block" v-bind:class="{ 'load' : data.scores.{{ id }}.load }">
     <div class="header">
         <div class="title">
-            <i class="fas fa-trophy"></i> {{ title }}
+            <i class="fas fa-trophy"></i>   {{ title }}
         </div>
     </div>
     <div v-if="data.scores.{{ id }}.out.length != 0" class="scores">
@@ -89,7 +104,7 @@
 <div class="log-block" v-bind:class="{ 'load' : data.maps.{{ id }}.load }">
     <div class="header">
         <div class="title">
-            <i class="fas fa-address-book"></i> Most Played Beatmaps
+            <i class="fas fa-address-book"></i>   Most Played Beatmaps
         </div>
     </div>
     <div v-if="data.maps.{{ id }}.out.length != 0" class="beatmaps">
@@ -353,6 +368,10 @@
                 </div>-->
             </div>
             <div class="column">
+                <!-- About me -->
+                {% if about_me['content'] != False %}
+                {{ abtme('About Me')}}
+                {% endif %}
                 {{ scores('Best Scores', 'best')}}
                 {{ scores('Recent Scores', 'recent')}}
                 {{ maps('Most Beatmaps Played', 'most')}}

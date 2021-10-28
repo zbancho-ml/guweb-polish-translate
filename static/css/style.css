@@ -16,6 +16,7 @@ body {
 html {
   position: relative;
   min-height: 100%;
+  --main: 280 !important;
 }
 
 .footer {

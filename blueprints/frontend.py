@@ -114,6 +114,30 @@ async def home_account_edit():
 async def settings_profile():
     return await render_template('settings/profile.html')
 
+@frontend.route('/settings/userprofile')
+@frontend.route('/settings/user_profile')
+@login_required
+async def settings_user_profile():
+    about_me = await glob.db.fetch('SELECT content FROM about_me WHERE id=%s', session['user_data']['id'])
+    if not about_me:
+        about_me = {}
+        about_me['content'] = ""
+    return await render_template('settings/user_profile.html', about_me_content=about_me['content'])
+
+@frontend.route('/settings/profile', methods=['POST'])
+@login_required
+async def settings_user_profile_post():
+    form = await request.form
+    about_me_content = form.get('about_me_content', type=str)
+    
+    about_me = await glob.db.fetch('SELECT id FROM about_me WHERE id=%s', session['user_data']['id'])
+    if not about_me:
+        await glob.db.execute("INSERT INTO about_me VALUES (%s, %s)", (session['user_data']['id'], about_me_content))
+    else:
+        await glob.db.execute("UPDATE about_me SET content=%s WHERE id=%s", (about_me_content, session['user_data']['id']))
+
+    return await flash('success', 'Your about me has been changed', 'settings/profile')
+
 @frontend.route('/settings/profile', methods=['POST'])
 @login_required
 async def settings_profile_post():
@@ -429,9 +453,15 @@ async def profile_select(id):
             group_list.append(["gem", "Supporter+", "#f78fb3"])
         if Privileges.Whitelisted in user_priv:
             group_list.append(["check", "Verified", "#28a40c"])
-    
+
+    about_me = await glob.db.fetch("SELECT content FROM about_me WHERE id=%s", user_data['id'])
+    if not about_me:
+        about_me = {}
+        about_me['content'] = False
+
     user_data['customisation'] = utils.has_profile_customizations(user_data['id'])
-    return await render_template('profile.html', user=user_data, mode=mode, mods=mods, group_list=group_list, clan=clan)
+    return await render_template('profile.html', user=user_data, mode=mode, mods=mods, group_list=group_list, 
+                                                 clan=clan, about_me=about_me)
 
 
 @frontend.route('/leaderboard')
