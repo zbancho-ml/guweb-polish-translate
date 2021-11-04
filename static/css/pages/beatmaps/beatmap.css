@@ -1,0 +1,4 @@
+.page-header {
+    background-color: hsl(var(--main), 20%, 15%);
+    height: auto;
+}

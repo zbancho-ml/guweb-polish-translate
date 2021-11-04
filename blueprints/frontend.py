@@ -6,6 +6,8 @@ import bcrypt
 import hashlib
 import os
 import time
+import datetime
+from pandas import to_datetime
 
 from cmyui.logging import Ansi
 from cmyui.logging import log
@@ -24,7 +26,7 @@ from constants import regexes
 from objects import glob
 from objects import utils
 from objects.privileges import Privileges
-from objects.utils import flash
+from objects.utils import flash, time_ago
 from objects.utils import flash_with_customizations
 
 VALID_MODES = frozenset({'std', 'taiko', 'catch', 'mania'})
@@ -101,7 +103,18 @@ async def home():
     record['catch-rx']['pp'] = round(float(record['catch-rx']['pp']), 2)
     record['mania-vn']['pp'] = round(float(record['mania-vn']['pp']), 2)
 
-    return await render_template('home.html', record=record)
+
+    latest_users = await glob.db.fetchall(
+        'SELECT id, name, country, priv, creation_time AS `time_ago` '
+        'FROM users ORDER BY creation_time DESC LIMIT 10'
+        )
+    now = datetime.datetime.utcnow()
+    for el in latest_users:
+        time2 = datetime.datetime.fromtimestamp(int(el['time_ago']))
+        el['time_ago'] = time_ago(now, time2, 1) + "ago"
+        el['country'] = el['country'].upper()
+
+    return await render_template('home.html', record=record, latest_users=latest_users)
 
 
 @frontend.route('/home/account/edit')
@@ -129,7 +142,7 @@ async def settings_user_profile():
 async def settings_user_profile_post():
     form = await request.form
     about_me_content = form.get('about_me_content', type=str)
-    
+
     about_me = await glob.db.fetch('SELECT id FROM about_me WHERE id=%s', session['user_data']['id'])
     if not about_me:
         await glob.db.execute("INSERT INTO about_me VALUES (%s, %s)", (session['user_data']['id'], about_me_content))
@@ -408,17 +421,22 @@ async def profile_select(id):
     # no user
     if not user_data:
         return (await render_template('404.html'), 404)
-
+    #Update priv
+    if 'authenticated' in session and int(session['user_data']['id']) == int(user_data['id']):
+        author_priv = await glob.db.fetch("SELECT priv FROM users WHERE id=%s", session['user_data']['id'])
+        session['user_data']['priv'] = author_priv['priv']
     # make sure mode & mods are valid args
     if mode is not None and mode not in VALID_MODES:
         return (await render_template('404.html'), 404)
-    
+
     if mods is not None and mods not in VALID_MODS:
         return (await render_template('404.html'), 404)
 
+    #Restricted shit
     is_staff = 'authenticated' in session and (Privileges.Admin in Privileges(int(session['user_data']['priv'])))
     if not user_data or not (user_data['priv'] & Privileges.Normal or is_staff):
         return (await render_template('404.html'), 404)
+
     #Get clan (and life)
     if int(user_data['clan_id']) != 0:
         clan = await glob.db.fetch("SELECT tag FROM clans WHERE id=%s", user_data['clan_id'])
@@ -460,7 +478,7 @@ async def profile_select(id):
         about_me['content'] = False
 
     user_data['customisation'] = utils.has_profile_customizations(user_data['id'])
-    return await render_template('profile.html', user=user_data, mode=mode, mods=mods, group_list=group_list, 
+    return await render_template('profile.html', user=user_data, mode=mode, mods=mods, group_list=group_list,
                                                  clan=clan, about_me=about_me)
 
 
@@ -536,11 +554,6 @@ async def login_post():
             log(f"{username}'s login failed - not verified.", Ansi.LYELLOW)
         return await render_template('verify.html')
 
-    # user banned; deny post
-    if not user_info['priv'] & Privileges.Normal:
-        if glob.config.debug:
-            log(f"{username}'s login failed - banned.", Ansi.RED)
-        return await flash('error', 'Your account is restricted. You are not allowed to log in.', 'login')
 
     # login successful; store session data
     if glob.config.debug:
@@ -761,7 +774,7 @@ async def get_player_score(score_id:int=0, mods:str = "vn"):
 
     # Get user
     user = await glob.db.fetch("SELECT id, name, country, priv FROM users WHERE id=%s", score['userid'])
-    
+
 
 
     if Privileges.Normal not in Privileges(int(user['priv'])):
@@ -777,7 +790,7 @@ async def get_player_score(score_id:int=0, mods:str = "vn"):
         log(f"Tried fetching scoreid {score_id} in {mods} (Route: /score/): Map with md5 '{score['map_md5']}' does not exist in database,"
         " that shouldn't happen unless you deleted it manually", Ansi.RED)
         return await flash('error', 'Could not display score, map does not exist in database', 'home')
-    
+
     #Change variables and stuff like that
     try:
         map_info['diff'] = round(map_info['diff'], 2)
@@ -840,7 +853,7 @@ async def get_player_score(score_id:int=0, mods:str = "vn"):
             group_list.append(["❤❤", "#f78fb3"])
         if Privileges.Whitelisted in user_priv:
             group_list.append(["✓", "#28a40c"])
-        
+
     #Get status
     async with glob.http.get(f"https://osu.seventwentyseven.tk/api/get_player_status?id={user['id']}") as resp:
         resp = await resp.json()
@@ -848,10 +861,20 @@ async def get_player_score(score_id:int=0, mods:str = "vn"):
             player_status = ["#38c714", "Online"]
         else:
             player_status = ["#000000", "Offline"]
-    
+
     #Mods
         if int(score['mods']) != 0:
             score['mods'] = f"+{Mods(int(score['mods']))!r}"
-    return await render_template('score.html', score=score, user=user, map_info=map_info, 
-                                grade_shadow=grade_shadow, group_list=group_list, 
+    return await render_template('score.html', score=score, user=user, map_info=map_info,
+                                grade_shadow=grade_shadow, group_list=group_list,
                                 player_status=player_status, mode_mods=mods)
+
+#Beatmaps routes
+@frontend.route('/b/<map_id>')
+@frontend.route('/s/<map_id>')
+@frontend.route('/beatmaps/<map_id>')
+async def beatmap_page(map_id:int=None):
+    if map_id == None or map_id.isdigit() == False:
+        return render_template('404.html')
+
+    return await render_template('beatmaps/beatmap.html')

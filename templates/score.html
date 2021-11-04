@@ -105,15 +105,15 @@
                         height: 150px;
                         width: 300px;
                       }
-                      
+
                       .score-information-top { grid-area: score-information-top; }
-                      
+
                       .s300 { grid-area: s300; }
-                      
+
                       .s100 { grid-area: s100; }
-                      
+
                       .s50 { grid-area: s50; }
-                      
+
                       .miss { grid-area: miss; }
 
                       .score-information-top {
@@ -125,14 +125,14 @@
                         grid-template-areas:
                           "acc max-combo pp";
                       }
-                      
+
                       .acc { grid-area: acc; }
-                      
+
                       .max-combo { grid-area: max-combo; }
-                      
+
                       .pp { grid-area: pp; }
-                      
-                      
+
+
                 </style>
                 <div class="score-information-block">
                     <div class="score-information-top">
@@ -150,11 +150,11 @@
                             </div>
                             {% if mode != 3 and score['max_combo'] >= map_info['max_combo'] %}
                             <div class="stat-value" style="color: #b3ff66 !important;">
-                                {{ score['max_combo']}}  
+                                {{ score['max_combo']}}
                             </div>
                             {% else %}
                             <div class="stat-value">
-                                {{ score['max_combo']}}  
+                                {{ score['max_combo']}}
                             </div>
                             {% endif %}
                         </div>
@@ -216,19 +216,19 @@
                     height: 150px;
                     width: 300px;
                   }
-                  
+
                   .acc { grid-area: acc; }
-                  
+
                   .max-combo { grid-area: max-combo; }
-                  
+
                   .pp { grid-area: pp; }
-                  
+
                   .n300 { grid-area: n300; }
-                  
+
                   .n50 { grid-area: n50; }
-                  
+
                   .nmiss { grid-area: nmiss; }
-                  
+
             </style>
             <div class="score-information-block1">
                 <div class="acc">
@@ -245,11 +245,11 @@
                     </div>
                     {% if mode != 3 and score['max_combo'] >= map_info['max_combo'] %}
                     <div class="stat-value" style="color: #b3ff66 !important;">
-                        {{ score['max_combo']}}  
+                        {{ score['max_combo']}}
                     </div>
                     {% else %}
                     <div class="stat-value">
-                        {{ score['max_combo']}}  
+                        {{ score['max_combo']}}
                     </div>
                     {% endif %}
                 </div>
@@ -302,15 +302,15 @@
                     height: 150px;
                     width: 300px;
                   }
-                  
+
                   .score-information-top { grid-area: score-information-top; }
-                  
+
                   .s300 { grid-area: s300; }
-                  
+
                   .s100 { grid-area: s100; }
-                  
+
                   .s50 { grid-area: s50; }
-                  
+
                   .miss { grid-area: miss; }
 
                   .score-information-top {
@@ -322,14 +322,13 @@
                     grid-template-areas:
                       "acc max-combo pp";
                   }
-                  
+
                   .acc { grid-area: acc; }
-                  
+
                   .max-combo { grid-area: max-combo; }
-                  
+
                   .pp { grid-area: pp; }
-                  
-                  
+
             </style>
             <div class="score-information-block">
                 <div class="score-information-top">
@@ -347,11 +346,11 @@
                         </div>
                         {% if mode != 3 and score['max_combo'] >= map_info['max_combo'] %}
                         <div class="stat-value" style="color: #b3ff66 !important;">
-                            {{ score['max_combo']}}  
+                            {{ score['max_combo']}}
                         </div>
                         {% else %}
                         <div class="stat-value">
-                            {{ score['max_combo']}}  
+                            {{ score['max_combo']}}
                         </div>
                         {% endif %}
                     </div>
@@ -401,11 +400,11 @@
             <!-- Mania -->
             <style>
                 .score-information-block1 {
-                    display: grid; 
-                    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr; 
-                    grid-template-rows: 1fr 1fr; 
-                    gap: 5px 5px; 
-                    grid-template-areas: 
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+                    grid-template-rows: 1fr 1fr;
+                    gap: 5px 5px;
+                    grid-template-areas:
                       "acc acc combo combo pp pp"
                       "max s300 s200 s100 s50 smiss";
                     max-height: 150px !important;

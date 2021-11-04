@@ -1,0 +1,193 @@
+{% extends 'admin/base.html' %}
+{% block title %} Users {% endblock %}
+
+{% macro card(title='base', haschart=true, chartname='base', data=0) %}
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex align-items-center">
+            <div class="subheader">{{ title }}</div>
+        </div>
+        <div class="d-flex align-items-baseline">
+            <div class="h1 mb-0 me-2">{{ data }}</div>
+        </div>
+    </div>
+    {% if haschart %}
+    <div id="chart-{{ chartname }}" class="chart-sm"></div>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% macro modal(title='base', id='base', name='base') %}
+<div class="modal modal-blur fade" id="{{ id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-body text-start pt-4">
+                <form id="{{ name }}" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">{{ title }}</label>
+                        <input type="text" class="form-control" name="{{ name }}">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="w-100">
+                    <div class="row">
+                        <div class="col">
+                            <button type="button" class="btn btn-white w-100" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                        <div class="col">
+                            <button type="submit" id="del-submit" form="{{ name }}"
+                                class="btn btn-primary w-100">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% block content %}
+{% if error %}
+<div class="alert alert-danger col-lg-3" role="alert" style="display: block; position: relative; margin-top: -3.5rem;">
+    <h4 class="alert-title">{{ error }}</h4>
+</div>
+{% endif %}
+
+<script>
+    var element = document.getElementById("navbar_users");
+    element.classList.add("active");
+  </script>
+<div class="page-wrapper">
+    <div class="container-xl">
+        <!-- Page title -->
+        <div class="page-header d-print-none">
+            <div class="row align-items-center">
+                <div class="col">
+                    <!-- Page pre-title -->
+                    <div class="page-pretitle">
+                        Overview
+                    </div>
+                    <h2 class="page-title">
+                        Users
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-body">
+        <div class="container-xl">
+            <div class="row row-deck row-cards">
+                <div class="col-sm-6 col-lg-3">
+                    {{ card(title='Registered Users', data=user_data['registered'], chartname='online-users') }}
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    {{ card(title='Online Users',data=user_data['online']) }}
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    {{ card(title='Restricted Users',data=user_data['banned']) }}
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    {{ card(title='Supporters',data=user_data['supporter']) }}
+                </div>
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body border-bottom py-3">
+                            <div class="d-flex">
+                                <div class="text-muted">
+                                    Show
+                                    <div class="mx-2 d-inline-block">
+                                        <input type="text" class="form-control form-control-sm" value="10" size="3"
+                                            aria-label="Users count">
+                                    </div>
+                                    entries
+                                </div>
+                                <div class="ms-auto text-muted">
+                                    Search:
+                                    <div class="ms-2 d-inline-block">
+                                        <input type="text" class="form-control form-control-sm" aria-label="Search invoice">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table card-table table-vcenter text-nowrap datatable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Username</th>
+                                        <th>Groups</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in users %}
+                                    <tr>
+                                        <td>{{ i['id'] }}</td>
+                                        <td class="td-truncate">
+                                            <img src="/static/images/flags/{{ i['country']|upper }}.png" class="profile-flag" style="width: 25px; height: 17px; -webkit-box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.63); box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.2);">⠀
+                                            <a href="/u/{{ i['id'] }}">{{ i['name'] }}</a>
+                                        </td>
+                                        <td>{{ i['priv'] }} </td>
+                                        <td>
+                                            <a class="btn" href="/admin/users/edit/{{ i.id }}">
+                                                <i class="far fa-edit" aria-hidden="true"></i>⠀Edit
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer d-flex align-items-center">
+                            <ul class="pagination m-0 m-auto">
+                                <li class="page-item">
+                                    <a class="page-link" href="https://seventwentyseven.tk/admin/users/?page=1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                                            <path fill-rule="evenodd" d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                                        </svg>
+                                    </a>
+                                </li>
+                                <li class="page-item{{ page_foot[5][1] }}">
+                                    <a class="page-link" href="https://seventwentyseven.tk/admin/users/?page={{ page_foot[5][0] }}" tabindex="-1" aria-disabled="true">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><polyline points="15 6 9 12 15 18"></polyline></svg>
+                                        prev
+                                    </a>
+                                </li>
+                                <li class="page-item{{ page_foot[0][1] }}"><a class="page-link" href="https://seventwentyseven.tk/admin/users/?page={{ page_foot[0][0] }}">{{ page_foot[0][0] }}</a></li>
+                                <li class="page-item{{ page_foot[1][1] }}"><a class="page-link" href="https://seventwentyseven.tk/admin/users/?page={{ page_foot[1][0] }}">{{ page_foot[1][0] }}</a></li>
+                                <li class="page-item{{ page_foot[2][1] }}"><a class="page-link" href="https://seventwentyseven.tk/admin/users/?page={{ page_foot[2][0] }}">{{ page_foot[2][0] }}</a></li>
+                                <li class="page-item{{ page_foot[3][1] }}"><a class="page-link" href="https://seventwentyseven.tk/admin/users/?page={{ page_foot[3][0] }}">{{ page_foot[3][0] }}</a></li>
+                                <li class="page-item{{ page_foot[4][1] }}"><a class="page-link" href="https://seventwentyseven.tk/admin/users/?page={{ page_foot[4][0] }}">{{ page_foot[4][0] }}</a></li>
+                                <li class="page-item">
+                                    <a class="page-link{{ page_foot[6][1] }}" href="https://seventwentyseven.tk/admin/users/?page={{ page_foot[6][0] }}">
+                                        next <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><polyline points="9 6 15 12 9 18"></polyline></svg>
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="https://seventwentyseven.tk/admin/users/?page={{ max_page }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z"/>
+                                            <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z"/>
+                                        </svg>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ modal(title='Username', id="edi-usr-usr", name='username') }}
+{{ modal(title='Email', id="edi-usr-ema", name='email') }}
+{{ modal(title='IP', id="sch-ip", name='ip') }}
+
+{% endblock %}
+
+

@@ -6,139 +6,116 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/timeago.js/4.0.2/timeago.min.js"></script>
 {% endblock%}
 
-{% block content %}
+{% macro timeline_obj(color="blue", time_ago="0 days", icon="fas fa-question", description="No description", author_name="None", receiver_name="None", author_id="#", receiver_id="#", type="unknown") %}
+<li>
+  <div class="list-timeline-icon bg-{{ color }}">
+    <i class="{{ icon }}"></i>
+  </div>
+  <div class="list-timeline-content">
+    <div class="list-timeline-time">{{ time_ago }}</div>
+    <p class="list-timeline-title"><a href="https://seventwentyseven.tk/u/{{ author_id }}">{{ author_name }}</a> {{ type }} <a href="https://seventwentyseven.tk/u/{{ receiver_id }}">{{ receiver_name }}</a></p>
+    <p class="text-muted">{{ description }}</p>
+  </div>
+</li>
+{% endmacro %}
 
-<div class="dashboard" id="dashboard">
-    <div class="columns is-marginless is-paddingless">
-        <div class="column is-paddingless p-3">
-            <div class="card">
-                <div class="title">total users</div>
-                <i class="fa fa-users"></i>
-                <div class="value">{{ dashdata['count'] }}</div>
-                <div class="stat">that's a lot of people!</div>
-            </div>
-        </div>
-        <div class="column is-paddingless p-3">
-            <div class="card">
-                <div class="title">total online</div>
-                <i class="fa fa-circle"></i>
-                <div class="value">
-                    <% online_users %>
-                </div>
-                <div class="stat">rising in popularity are we?</div>
-            </div>
-        </div>
-        <div class="column is-paddingless p-3">
-            <div class="card">
-                <div class="title">lastest user</div>
-                <i class="fa fa-book"></i>
-                <div class="value">{{ dashdata['lastest_user'] }}</div>
-                <div class="stat">latest and greatest! welcome!</div>
-            </div>
-        </div>
-        <div class="column is-paddingless p-3">
-            <div class="card">
-                <div class="title">total banned</div>
-                <i class="fa fa-calendar"></i>
-                <div class="value">{{ dashdata['banned'] }}</div>
-                <div class="stat">naughty naughty :(</div>
-            </div>
-        </div>
+{% macro card(title='base', haschart=true, chartname='base', data="0") %}
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex align-items-center">
+      <div class="subheader">{{ title }}</div>
     </div>
-<div class="columns is-marginless is-paddingless">
-    {% if recentusers %}
-    <div class="column is-paddingless m-2 is-3">
-        <div class="recent-beat">
-            <div class="columns is-marginless">
-                <div class="column is-paddingless flex-vcenter">
-                    <h2 class="section-title">Recent Users</h2>
-                </div>
-            </div>
-            <div class="blockdata">
-                {% for user in recentusers %}
-                <a href="/u/{{ user.id }}" class="user-block{% if user.priv == 1 %} unverified{% endif %}">
-                    <img src="https://a.{{ domain() }}/{{ user.id }}" class="avatar-picture">
-                    <div class="user-stats"><span class="user-title">
-                        <img src="/static/images/flags/{{ user.country|upper }}.png" class="profile-flag"> {{ user.name }}
-                        </span><span class="user-artist">
-                            {{ user.email }}
-                        </span>
-                        <div class="user-footer">
-                            <span class="user-mapper">
-                            {{ timeago.format((datetime.datetime.fromtimestamp(user.creation_time)),
-                                (datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4))) }}
-                            </span>
-                            <div class="d-flex align-items-baseline">
-                                <span>
-                                {{ timeago.format((datetime.datetime.fromtimestamp(user.latest_activity)),
-                                    (datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4))) }}
-                                </span>
-                                <div class="target-button newmaps-color">
-                                    <i class="fa fa-arrow-right"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-                {% endfor %}
-            </div>
-        </div>
+    <div class="d-flex align-items-baseline">
+      <div class="h1 mb-0 me-2">{{ data }}</div>
     </div>
-    {% endif %}
-    {% if recentscores %}
-    <div class="column is-paddingless m-2">
-        <div class="recent-beat">
-            <div class="columns is-marginless">
-                <div class="column is-paddingless flex-vcenter">
-                    <h2 class="section-title">Recent Score</h2>
-                </div>
-            </div>
-            <div class="blockdata">
-                {% for maps in recentscores %}
-                <div class="map-single">
-                    <div class="map-content1">
-                        <div class="map-image"><img src="https://assets.ppy.sh/beatmaps/{{ maps.set_id }}/covers/cover.jpg"
-                                class="map-image-picture"></div>
-                        <div class="map-title-block">
-                            <div class="map-title"><a class="user-link">
-                                    [{{ maps.mode }}] {{ maps.title }} [{{ maps.version }}]
-                                </a></div>
-                            <div class="play-stats">
-                                {{ maps.score }} / {{ maps.max_combo }}x
-                            </div>
-                            <div class="map-date"><time>
-                                {{ timeago.format((maps.play_time), (datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4))) }}
-                                </time></div>
-                        </div>
-                    </div>
-                    <div class="map-content2">
-                        <div class="score-details d-flex">
-                            <div class="score-details_right-block">
-                                <div class="score-details_pp-block">
-                                    <div class="map-pp">
-                                        {{ maps.pp }}<span class="map-pp-unit">pp</span></div>
-                                    <div class="map-acc">accuracy:&nbsp;<b>
-                                        {{ maps.acc }}%
-                                        </b></div>
-                                </div>
-                                <div class="score-details_grade-block">
-                                    <div class="rank-single">
-                                        <div class="map-rank rank-{{ maps.grade|upper }}">
-                                            {{ maps.grade.replace("X", "SS").replace("H", "") }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
+  </div>
+    {% if haschart %}
+    <div id="chart-{{ chartname }}" class="chart-sm"></div>
     {% endif %}
 </div>
+{% endmacro %}
+
+{% block content %}
+<script>
+  var element = document.getElementById("navbar_home");
+  element.classList.add("active");
+</script>
+<div class="page-wrapper">
+  <!-- Page title -->
+  <div class="container-xl">
+    <!-- Page title -->
+    <div class="page-header d-print-none">
+      <div class="row align-items-center">
+        <div class="col">
+          <!-- Page pre-title -->
+          <div class="page-pretitle">
+            Overview
+          </div>
+          <h2 class="page-title">
+            Dashboard
+          </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header Cards -->
+  <div class="page-body">
+    <div class="container-xl">
+      <div class="row row-deck row-cards">
+        <div class="col-sm-6 col-lg-3">
+          {{ card(title='Registered Users', data=dash_data['registered']) }}
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          {{ card(title='Restricted Users',data=dash_data['banned']) }}
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          {{ card(title='Supporters',data=dash_data['supporter']) }}
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          {{ card(title='Latest User',data=dash_data['latest_user']) }}
+        </div>
+        <div class="col-lg-6">
+          <div class="row row-cards">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Recent Actions</h3>
+                </div>
+                <div class="card-body">
+                  <ul class="list list-timeline">
+                    {% for el in recent_logs %}
+                    {{ timeline_obj(color=el['color'], time_ago=el['time'], icon=el['icon'], description=el['msg'], author_name=el['author_name'], receiver_name=el['receiver_name'], author_id=el['from'], receiver_id=el['to'], type=el['type']) }}
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="row row-cards">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-img-top img-responsive img-responsive-4by3" style="background-image: url(https://assets.ppy.sh/beatmaps/{{ most_played['set_id'] }}/covers/cover.jpg);"></div>
+                <div class="card-body">
+                  <p>The most played beatmap is <strong>{{ most_played['map_info'] }}</strong></p>
+                  <p>This map has playcount of <strong>{{ most_played['passes'] }}</strong></p>
+                  <center>
+                    <a href="#" class="btn btn-primary">
+                      View Map
+                    </a>
+                  </center>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 
 <script src="/static/js/pages/admin/dashboard.js"></script>
-
 {% endblock %}

@@ -1,0 +1,131 @@
+{% extends 'admin/base.html' %}
+{% block title %} Dashboard {% endblock %}
+{% block header %}
+<script src="/static/js/asserts/vue.js"></script>
+<script src="/static/js/asserts/vue-axios.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/timeago.js/4.0.2/timeago.min.js"></script>
+{% endblock%}
+
+
+{% macro card(title='base', haschart=true, chartname='base', data="0") %}
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex align-items-center">
+      <div class="subheader">{{ title }}</div>
+    </div>
+    <div class="d-flex align-items-baseline">
+      <div class="h1 mb-0 me-2">{{ data }}</div>
+    </div>
+  </div>
+    {% if haschart %}
+    <div id="chart-{{ chartname }}" class="chart-sm"></div>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% block content %}
+<script>
+  var element = document.getElementById("navbar_users");
+  element.classList.add("active");
+</script>
+<div class="page-wrapper">
+  <!-- Page title -->
+  <div class="container-xl">
+    <!-- Page title -->
+    <div class="page-header d-print-none">
+      <div class="row align-items-center">
+        <div class="col">
+          <!-- Page pre-title -->
+          <div class="page-pretitle">
+            Edit User
+          </div>
+          <h2 class="page-title">
+            {{ user_data['name'] }}
+          </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="container-xl">
+      {% if access_denied['higher_group'] == True %}
+      <div class="card bg-red" style="color: white;">
+        <div class="card-body text-left">{{ access_denied['err_msg']}}</div>
+      </div>
+      {% else %}
+      <div class="card">
+        <div class="card-body">
+          <div class="row row-cards">
+            <div class="col-md-4">
+              <div class="card">
+                <div class="card-cover text-center" style="background-image: url(https://seventwentyseven.tk/banners/{{ user_data['id'] }})">
+                  <span class="avatar avatar-xl avatar-thumb avatar-rounded" style="background-image: url(https://a.seventwentyseven.tk/{{ user_data['id'] }})"></span>
+                </div>
+                <div class="card-body text-left">
+                  <div class="mb-1"><h2>{{ user_data['name'] }}</h2></div>
+                  <div class="mb-1">{{ user_data['email'] }}</div>
+                  <div class="text-muted">Joined {{ user_data['creation_time'] }}</div>
+                  <div class="card-header mb-1"></div>
+                  <label class="form-label mt-3 text-center">Actions</label>
+                  <div class="card-body">
+                    <div>
+                      <a href="#" class="btn btn-danger w-100">
+                        Restrict
+                      </a>
+                    </div>
+                    <div class="mt-2">
+                      <a href="#" class="btn btn-warning w-100">
+                        Silence
+                      </a>
+                    </div>
+                    <div class="mt-2">
+                      <a href="#" class="btn btn-success w-100">
+                        Unrestrict
+                      </a>
+                    </div>
+                    <div class="mt-2">
+                      <a href="#" class="btn btn-success w-100">
+                        Unsilence
+                      </a>
+                    </div>
+                    <div class="mt-2">
+                      <a href="#" class="btn btn-info w-100">
+                        Add Note
+                      </a>
+                    </div>
+                    {% if admin['is_owner'] == True %}
+                    <div class="mt-2">
+                      <a href="#" class="btn btn-light w-100">
+                        Give Supporter
+                      </a>
+                    </div>
+                    {% else %}
+                    <div class="mt-2">
+                      <a href="#" class="btn btn-light w-100 disabled">
+                        Give Supporter
+                      </a>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="card">
+                <div class="card-header">
+                  <h4>User Stats</h4>
+                </div>
+                <div class="card-body text-left">
+                  Some Stuff here
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

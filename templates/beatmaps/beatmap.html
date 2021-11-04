@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %} Beatmap {% endblock %}
+
+{% block header %}
+<script src="/static/js/asserts/vue.js"></script>
+<script src="/static/js/asserts/vue-axios.js"></script>
+
+<script>
+    var domain = "{{ domain() }}";
+</script>
+
+<link rel="stylesheet" href="/static/css/pages/beatmaps/beatmap.css">
+{% endblock %}
+
+
+{% block content %}
+
+<div id="app" :class="(load ? 'load' : '')">
+    <!-- Header -->
+    <div class="page-header">
+        Header
+    </div>
+
+    <!-- Score Banner -->
+    <div class="score-banner">
+        Banner
+    </div>
+
+    <!-- Main block -->
+    <div class="main-block">
+        Main Block
+    </div>
+    <div class="leaderboards">
+        Leaderboards
+    </div>
+</div>
+
+<script src="/static/js/asserts/vue-flags.js"></script>
+{% endblock %}

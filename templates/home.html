@@ -3,10 +3,36 @@
 
 {% block header %}
 <link rel="stylesheet" href="/static/css/pages/home.css">
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 {% endblock %}
 
+{% macro l_usr_card(id, name, country, time_ago) %}
+<div class="latest-user-element">
+  <div class="avatar" style="background-image: url(https://a.seventwentyseven.tk/{{id}});"></div>
+  <div class="name">
+    <div class="latest-users-element-text">
+      <a href="https://seventwentyseven.tk/u/{{ id }}" class="profile-link">
+        <span class="latest-users-element-text"><img src="static/images/flags/{{ country }}.png" class="flag">{{name}}</span>
+      </a>
+    </div>
+  </div>
+  <div class="timeago">
+    <div class="latest-users-element-text-r">
+      <span class="latest-users-element-text-r">{{ time_ago }}</span>
+    </div>
+  </div>
+</div>
+{% endmacro %}
 {% block content %}
-
+<script>
+  axios.get('https://osu.seventwentyseven.tk/api/get_player_count')
+  .then((response) => {
+    var online = response.data.counts.online;
+    var registered = response.data.counts.total;
+    document.getElementById('online').innerHTML = online;
+    document.getElementById('registered').innerHTML = registered;
+  });
+</script>
 {% if flash %}
 <div class='noti-banner noti-banner-warning'>
   <div class="container">
@@ -40,7 +66,15 @@
   <div class="container flex">
     <div class="columns flex-vcenter">
       <div class="column flex-vcenter flex-lcenter is-size-2-desktop is-size-1-fullhd" id="title">
-        <h1 class="title is-spaced is-size-2-desktop is-size-1-fullhd">{{ appName() }}</h1>
+        <div class="server-stats-2">
+          <div class="server-stats-online">
+            <span><span id="online" style="color: #49fa55;"></span> ONLINE</span>
+          </div>
+          <div class="server-stats-registered">
+            <span><span id="registered" style="color: #ff4bf3;"></span> REGISTERED</span>
+          </div>
+        </div>
+        <h1 class="title is-spaced is-size-2-desktop is-size-1-fullhd">Seven Twenty Seven<span style="font-size: 28px; font-weight: 400;">.tk</span></h1>
         <h2 class="subtitle">
           We are an osu! private server built from the ground up with many
           unique features not seen elsewhere - for more information, check
@@ -226,7 +260,12 @@
     </div>
     <!-- Latest Users -->
     <div class="latest-users">
-      I really love Amatsuka Uto. Like, a lot. Like, a whole lot. You have no idea. I love her so much that it is inexplicable, and I'm ninety-nine percent sure that I have an unhealthy obsession. I will never get tired of listening that sweet, angelic voice. It is my life goal to meet up her in real life and just say hello to her.<br><br>Will finish later
+      <div class="latest-users-header">
+        <span><i class="fas fa-users" style="margin-right: 5px;"></i>Recent Users</span>
+      </div>
+      {% for el in latest_users %}
+        {{ l_usr_card(el['id'], el['name'], el['country'], el['time_ago'])}}
+      {% endfor %}
     </div>
 </section>
 {% endif %}

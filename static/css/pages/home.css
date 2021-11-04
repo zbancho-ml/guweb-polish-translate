@@ -244,3 +244,99 @@
   font-weight: 300;
   color: white;
 }
+
+.latest-user-element {
+  display: grid;
+  grid-template-columns: 0.5fr 1.25fr 1.25fr;
+  grid-template-rows: 1fr;
+  gap: 0.1fr 0.1fr;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "avatar name timeago";
+  max-height: 50px;
+  border-radius: 5px;
+  background-color: hsl(var(--main), 30%, 30%);
+  margin-top: 8px;
+}
+
+.avatar {
+  grid-area: avatar;
+  height: 50px;
+  width: 50px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 5px;
+}
+
+.name {
+  grid-area: name;
+}
+
+.timeago { grid-area: timeago; }
+
+.latest-users-element-text {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.latest-users-element-text-r {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  align-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 15px;
+  font-weight: 400;
+  margin-right: 20px;
+  color: #c5c5c5;
+}
+.flag {
+  height: 19px;
+  width: 28px;
+  margin-right: 5px;
+}
+
+.profile-link {
+  color: white;
+  transform: 0.2s;
+}
+
+.profile-link:hover {
+  color: rgb(238, 93, 243);
+}
+
+/* Server Stats */
+.server-stats-2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 500;
+  max-height: 24px !important;
+  width: 260px !important;
+  border-radius: 9001px;
+  background-color: hsl(var(--main), 25%, 25%);
+  padding: 3px;
+  margin-bottom: 10px;
+  max-width: 350px !important;
+}
+
+.server-stats-online {
+  display: flex;
+  margin-left: 30px;
+  justify-content: flex-start;
+}
+
+.server-stats-registered {
+  display: flex;
+  margin-right: 30px;
+  justify-content: flex-end;
+}

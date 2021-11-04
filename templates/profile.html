@@ -196,8 +196,20 @@
         </div>
         <div class="profile-flex">
             <div class="profile-avatar-area">
-                <img src="https://a.{{ domain() }}/{{ user['id'] }}" alt="avatar" class="rounded-avatar profile-avatar"
+                {% if 'authenticated' in session %}
+                {% if session['user_data']['id'] == user['id'] %}
+                <a href="/settings/avatar">
+                    <img src="https://a.{{ domain() }}/{{ user['id'] }}" alt="avatar" class="rounded-avatar profile-avatar"
                     onError="this.src='/static/images/avatar_notwork.png';">
+                </a>
+                {% else %}
+                <img src="https://a.{{ domain() }}/{{ user['id'] }}" alt="avatar" class="rounded-avatar profile-avatar"
+                onError="this.src='/static/images/avatar_notwork.png';">
+                {% endif %}
+                {% else %}
+                <img src="https://a.{{ domain() }}/{{ user['id'] }}" alt="avatar" class="rounded-avatar profile-avatar"
+                onError="this.src='/static/images/avatar_notwork.png';">
+                {% endif %}
             </div>
             <div class="bar-selection mode-selects">
                 <div class="select-left">
