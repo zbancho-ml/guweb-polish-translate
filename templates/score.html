@@ -53,8 +53,8 @@
             {% endif %}
         </div>
         <div class="score-banner-replaydownload">
-            <button type="button" class="replay-download-button" onclick=" window.open('https://osu.seventwentyseven.tk/api/get_replay?id={{ score['id'] }}','_blank')">
-                Download Replay
+            <button type="button" class="replay-download-button" onclick=" window.open('https://osu.zbancho.ml/api/get_replay?id={{ score['id'] }}','_blank')">
+                Pobierz Replay
             </button>
         </div>
     </div>
@@ -64,11 +64,11 @@
         <!-- User Card -->
         <div class="user-card" style="background-image: {{ user['banner'] }}">
             <div class="user-card-avatar">
-                <img src="https://a.seventwentyseven.tk/{{ user['id'] }}" class="user-card-avatar-image" onError="this.src='/static/images/avatar_notwork.png';">
+                <img src="https://a.zbancho.ml/{{ user['id'] }}" class="user-card-avatar-image" onError="this.src='/static/images/avatar_notwork.png';">
             </div>
             <div class="user-card-username">
-                <a href="https://seventwentyseven.tk/u/{{ user['id'] }}" class="username-link">
-                    <img src="https://seventwentyseven.tk/static/images/flags/{{ user['country'] }}.png" class="profile-flag">
+                <a href="https://zbancho.ml/u/{{ user['id'] }}" class="username-link">
+                    <img src="https://zbancho.ml/static/images/flags/{{ user['country'] }}.png" class="profile-flag">
                     {{ user['name'] }}
                 </a>
             </div>

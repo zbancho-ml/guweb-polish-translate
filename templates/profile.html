@@ -45,7 +45,7 @@
                                     mods = "vn"
                                 }
                             </script>
-                            <a class="beatmap-link" v-bind:href="'https://seventwentyseven.tk/score/' + map.id + '/' + mods">
+                            <a class="beatmap-link" v-bind:href="'https://zbancho.ml/score/' + map.id + '/' + mods">
                                 <% map.beatmap.artist %> - <% map.beatmap.title %> [<% map.beatmap.version %>] <!--<span v-if="map.mods != 0">+ <% modsStr(map.mods) %></span>-->
                             </a>
                         </div>
@@ -89,13 +89,13 @@
                 <h1 class="title">: (</h1>
             </div>
             <div class="column">
-                <h1 class="title is-6">No scores available</h1>
-                <p class="subtitle is-7">Try playing something?</p>
+                <h1 class="title is-6">Brak wyników dostępnych</h1>
+                <p class="subtitle is-7">Może spróbuj coś zagrać?</p>
             </div>
         </div>
     </div>
     <div v-if="data.scores.{{ id }}.more.full == false" class="extra-block">
-        <a class="show-button" @click="AddLimit('{{ id }}score')">Show more</a>
+        <a class="show-button" @click="AddLimit('{{ id }}score')">Pokaż więcej</a>
     </div>
 </div>
 {% endmacro %}
@@ -104,7 +104,7 @@
 <div class="log-block" v-bind:class="{ 'load' : data.maps.{{ id }}.load }">
     <div class="header">
         <div class="title">
-            <i class="fas fa-address-book"></i>   Most Played Beatmaps
+            <i class="fas fa-address-book"></i>   Najczęściej grane beatmapy
         </div>
     </div>
     <div v-if="data.maps.{{ id }}.out.length != 0" class="beatmaps">
@@ -137,13 +137,13 @@
                 <h1 class="title">: (</h1>
             </div>
             <div class="column">
-                <h1 class="title is-6">No beatmaps available</h1>
-                <p class="subtitle is-7">Try playing something?</p>
+                <h1 class="title is-6">Brak Beatmap Dostępnych</h1>
+                <p class="subtitle is-7">Może spróbuj coś zagrać?</p>
             </div>
         </div>
     </div>
     <div v-if="data.maps.{{ id }}.more.full == false" class="extra-block">
-        <a class="show-button" @click="AddLimit('mostplay')">Show more</a>
+        <a class="show-button" @click="AddLimit('mostplay')">Pokaż więcej</a>
     </div>
 </div>
 {% endmacro %}
@@ -277,7 +277,7 @@
                 </div>-->
                 <div class="header">
                     <div class="title">
-                        <i class="fas fa-chart-pie"></i> Statistics
+                        <i class="fas fa-chart-pie"></i> Statystyki
                     </div>
                 </div>
                 <div class="stats-block">
@@ -382,11 +382,11 @@
             <div class="column">
                 <!-- About me -->
                 {% if about_me['content'] != False %}
-                {{ abtme('About Me')}}
+                {{ abtme('o mnie')}}
                 {% endif %}
-                {{ scores('Best Scores', 'best')}}
-                {{ scores('Recent Scores', 'recent')}}
-                {{ maps('Most Beatmaps Played', 'most')}}
+                {{ scores('Najlepsze wyniki', 'best')}}
+                {{ scores('Ostatnie wyniki', 'recent')}}
+                {{ maps('Najczęściej grane beatmapy', 'most')}}
             </div>
         </div>
     </div>

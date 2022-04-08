@@ -8,10 +8,10 @@
 
 {% macro l_usr_card(id, name, country, time_ago) %}
 <div class="latest-user-element">
-  <div class="avatar" style="background-image: url(https://a.seventwentyseven.tk/{{id}});"></div>
+  <div class="avatar" style="background-image: url(https://a.zbancho.ml/{{id}});"></div>
   <div class="name">
     <div class="latest-users-element-text">
-      <a href="https://seventwentyseven.tk/u/{{ id }}" class="profile-link">
+      <a href="https://zbancho.ml/u/{{ id }}" class="profile-link">
         <span class="latest-users-element-text"><img src="static/images/flags/{{ country }}.png" class="flag">{{name}}</span>
       </a>
     </div>
@@ -25,7 +25,7 @@
 {% endmacro %}
 {% block content %}
 <script>
-  axios.get('https://osu.seventwentyseven.tk/api/get_player_count')
+  axios.get('https://osu.zbancho.ml/api/get_player_count')
   .then((response) => {
     var online = response.data.counts.online;
     var registered = response.data.counts.total;
@@ -74,21 +74,17 @@
             <span><span id="registered" style="color: #ff4bf3;"></span> REGISTERED</span>
           </div>
         </div>
-        <h1 class="title is-spaced is-size-2-desktop is-size-1-fullhd">Seven Twenty Seven<span style="font-size: 28px; font-weight: 400;">.tk</span></h1>
+        <h1 class="title is-spaced is-size-2-desktop is-size-1-fullhd">Zbancho.ml<span style="font-size: 28px; font-weight: 400;">.tk</span></h1>
         <h2 class="subtitle">
-          We are an osu! private server built from the ground up with many
-          unique features not seen elsewhere - for more information, check
-          out <a href="http://github.com/cmyui/gulag">gulag</a>
-          and <a href="https://github.com/Varkaria/guweb">guweb</a>
-          on GitHub - we're fully open source!
+         witam na zbancho.ml jednym z polskich serwer mam nadzieje że wam się spodoba
         </h2>
         {% if not session.authenticated %}
         <div class="buttons">
           <a class="button is-primary" href="/register">
-            <strong>Sign up</strong>
+            <strong>Zarejestruj</strong>
           </a>
           <a class="button is-light" href="/login">
-            Log in
+            Zaloguj
           </a>
         </div>
         {% endif %}
@@ -110,10 +106,8 @@
             <i class="image is-32x32 fas fa-address-card"></i>
           </div>
           <div class="column is-10">
-            <h4 class="title is-spaced is-4">PP for Relax and Autopilot</h4>
-            <p class="subtitle is-6">Our server has unique pp formula for relax and autopilot.
-              Good at waving your cursor or just smashing your keyboard? Join {{ appName() }} and get a fair reward for
-              your skills!
+            <h4 class="title is-spaced is-4">PP za Relax i Autopilot</h4>
+            <p class="subtitle is-6">U nas zamiast rozwalać klawiatury lub myszki możesz zagrać w tryb relax albo autopilot (zależy od tego którą z tych rzeczy rozwaliłeś)
             </p>
           </div>
         </div>
@@ -124,12 +118,8 @@
             <i class="image is-32x32 fas fa-ambulance"></i>
           </div>
           <div class="column is-10">
-            <h4 class="title is-spaced is-4">Free osu!direct</h4>
-            <p class="subtitle is-6">You won't have to pay for osu!supporter to have a convenient gameplay experience in
-              the
-              client - osu!direct is available for everyone! Keep in mind supporting us still grants a huge set of cool
-              perks but
-              absense of it doesn't affect your game sessions!</p>
+            <h4 class="title is-spaced is-4">Darmowy Supporter</h4>
+            <p class="subtitle is-6">masz darmowego supportera ale i tak ci się nie przyda bo większość rzeczy nawet nie działa</p>
           </div>
         </div>
       </div>
@@ -139,9 +129,8 @@
             <i class="image is-32x32 fas fa-archive"></i>
           </div>
           <div class="column is-10">
-            <h4 class="title is-spaced is-4">Flexible library</h4>
-            <p class="subtitle is-6">We're written on top of cmyui's multipurpose library allowing for a fully
-              asynchronous environment, both improving performance and the user's experience in the long term!</p>
+            <h4 class="title is-spaced is-4">Ultra szybki serwer</h4>
+            <p class="subtitle is-6">u nas zdązysz ukończyć wszystkie części wiedzmina, gothica i zwiedzić pół świata zanim twój wynik zostanie zaaktualizowany</p>
           </div>
         </div>
       </div>
@@ -151,117 +140,117 @@
 {% if record is defined %}
 <section class="section">
   <div class="container has-text-centered py-4">
-    <h2 class="title mb-6">PP Records and Recent users</h2>
+    <h2 class="title mb-6">Rekordy PP ostanich użytkowników</h2>
   </div>
   <div class="server-stats">
     <div class="pp-std-vn">
       <div class="stat-block" style="background: linear-gradient(hsl(var(--main), 15%, 15%, 0.8), hsl(var(--main), 15%, 15%, 0.8)), url(https://assets.ppy.sh/beatmaps/{{ record['std-vn']['set_id'] }}/covers/card.jpg); background-size: cover; background-position-x: 50%;">
         <div class="stat-mode-name">
-          <i class="mode-icon mode-osu"></i> <a href="https://seventwentyseven.tk/score/{{ record['std-vn']['id'] }}/vn" class="stat-mode-scorelink">Vanilla Osu Record</a>
+          <i class="mode-icon mode-osu"></i> <a href="https://zbancho.ml/score/{{ record['std-vn']['id'] }}/vn" class="stat-mode-scorelink">Vanilla Osu Record</a>
         </div>
         <div class="stat-avatar-pp">
-          <img src="https://a.seventwentyseven.tk/{{ record['std-vn']['userid'] }}" class="stat-avatar-img" onError="this.src='/static/images/avatar_notwork.png';"><span> {{ record['std-vn']['pp'] }}  <strong>PP</strong></span>
+          <img src="https://a.zbancho.ml/{{ record['std-vn']['userid'] }}" class="stat-avatar-img" onError="this.src='/static/images/avatar_notwork.png';"><span> {{ record['std-vn']['pp'] }}  <strong>PP</strong></span>
         </div>
         <div class="stat-user">
-          <span>Played by <a href="https://seventwentyseven.tk/u/{{ record['std-vn']['userid'] }}" style="font-weight: 500 !important;">{{ record['std-vn']['name'] }}</a></span>
+          <span>zagrane przez <a href="https://zbancho.ml/u/{{ record['std-vn']['userid'] }}" style="font-weight: 500 !important;">{{ record['std-vn']['name'] }}</a></span>
         </div>
       </div>
     </div>
     <div class="pp-std-rx">
       <div class="stat-block" style="background: linear-gradient(hsl(var(--main), 15%, 15%, 0.8), hsl(var(--main), 15%, 15%, 0.8)), url(https://assets.ppy.sh/beatmaps/{{ record['std-rx']['set_id'] }}/covers/card.jpg); background-size: cover; background-position-x: 50%;">
         <div class="stat-mode-name">
-          <i class="mode-icon mode-osu"></i> <a href="https://seventwentyseven.tk/score/{{ record['std-rx']['id'] }}/rx" class="stat-mode-scorelink">Relax Osu Record</a>
+          <i class="mode-icon mode-osu"></i> <a href="https://zbancho.ml/score/{{ record['std-rx']['id'] }}/rx" class="stat-mode-scorelink">Relax Osu Record</a>
         </div>
         <div class="stat-avatar-pp">
-          <img src="https://a.seventwentyseven.tk/{{ record['std-rx']['userid'] }}" class="stat-avatar-img" onError="this.src='/static/images/avatar_notwork.png';"><span> {{ record['std-rx']['pp'] }}  <strong>PP</strong></span>
+          <img src="https://a.zbancho.ml/{{ record['std-rx']['userid'] }}" class="stat-avatar-img" onError="this.src='/static/images/avatar_notwork.png';"><span> {{ record['std-rx']['pp'] }}  <strong>PP</strong></span>
         </div>
         <div class="stat-user">
-          <span>Played by <a href="https://seventwentyseven.tk/u/{{ record['std-rx']['userid'] }}" style="font-weight: 500 !important;">{{ record['std-rx']['name'] }}</a></span>
+          <span>Zagrane przez <a href="https://zbancho.ml/u/{{ record['std-rx']['userid'] }}" style="font-weight: 500 !important;">{{ record['std-rx']['name'] }}</a></span>
         </div>
       </div>
     </div>
     <div class="pp-std-ap">
       <div class="stat-block" style="background: linear-gradient(hsl(var(--main), 15%, 15%, 0.8), hsl(var(--main), 15%, 15%, 0.8)), url(https://assets.ppy.sh/beatmaps/{{ record['std-ap']['set_id'] }}/covers/card.jpg); background-size: cover; background-position-x: 50%;">
         <div class="stat-mode-name">
-          <i class="mode-icon mode-osu"></i> <a href="https://seventwentyseven.tk/score/{{ record['std-ap']['id'] }}/ap" class="stat-mode-scorelink">Autopilot Osu Record</a>
+          <i class="mode-icon mode-osu"></i> <a href="https://zbancho.ml/score/{{ record['std-ap']['id'] }}/ap" class="stat-mode-scorelink">Autopilot Osu Record</a>
         </div>
         <div class="stat-avatar-pp">
-          <img src="https://a.seventwentyseven.tk/{{ record['std-ap']['userid'] }}" class="stat-avatar-img" onError="this.src='/static/images/avatar_notwork.png';"><span> {{ record['std-ap']['pp'] }}  <strong>PP</strong></span>
+          <img src="https://a.zbancho.ml/{{ record['std-ap']['userid'] }}" class="stat-avatar-img" onError="this.src='/static/images/avatar_notwork.png';"><span> {{ record['std-ap']['pp'] }}  <strong>PP</strong></span>
         </div>
         <div class="stat-user">
-          <span>Played by <a href="https://seventwentyseven.tk/u/{{ record['std-ap']['userid'] }}" style="font-weight: 500 !important;">{{ record['std-ap']['name'] }}</a></span>
+          <span>Zagrane przez <a href="https://zbancho.ml/u/{{ record['std-ap']['userid'] }}" style="font-weight: 500 !important;">{{ record['std-ap']['name'] }}</a></span>
         </div>
       </div>
     </div>
     <div class="pp-taiko-vn">
       <div class="stat-block" style="background: linear-gradient(hsl(var(--main), 15%, 15%, 0.8), hsl(var(--main), 15%, 15%, 0.8)), url(https://assets.ppy.sh/beatmaps/{{ record['taiko-vn']['set_id'] }}/covers/card.jpg); background-size: cover; background-position-x: 50%;">
         <div class="stat-mode-name">
-          <i class="mode-icon mode-taiko"></i> <a href="https://seventwentyseven.tk/score/{{ record['taiko-vn']['id'] }}/vn" class="stat-mode-scorelink">Vanilla Taiko Record</a>
+          <i class="mode-icon mode-taiko"></i> <a href="https://zbancho.ml/score/{{ record['taiko-vn']['id'] }}/vn" class="stat-mode-scorelink">Vanilla Taiko Record</a>
         </div>
         <div class="stat-avatar-pp">
-          <img src="https://a.seventwentyseven.tk/{{ record['taiko-vn']['userid'] }}" class="stat-avatar-img" onError="this.src='/static/images/avatar_notwork.png';"><span> {{ record['taiko-vn']['pp'] }}  <strong>PP</strong></span>
+          <img src="https://a.zbancho.ml/{{ record['taiko-vn']['userid'] }}" class="stat-avatar-img" onError="this.src='/static/images/avatar_notwork.png';"><span> {{ record['taiko-vn']['pp'] }}  <strong>PP</strong></span>
         </div>
         <div class="stat-user">
-          <span>Played by <a href="https://seventwentyseven.tk/u/{{ record['taiko-vn']['userid'] }}" style="font-weight: 500 !important;">{{ record['taiko-vn']['name'] }}</a></span>
+          <span>Zagrane przez <a href="https://zbancho.ml/u/{{ record['taiko-vn']['userid'] }}" style="font-weight: 500 !important;">{{ record['taiko-vn']['name'] }}</a></span>
         </div>
       </div>
     </div>
     <div class="pp-taiko-rx">
       <div class="stat-block" style="background: linear-gradient(hsl(var(--main), 15%, 15%, 0.8), hsl(var(--main), 15%, 15%, 0.8)), url(https://assets.ppy.sh/beatmaps/{{ record['taiko-rx']['set_id'] }}/covers/card.jpg); background-size: cover; background-position-x: 50%;">
         <div class="stat-mode-name">
-          <i class="mode-icon mode-taiko"></i> <a href="https://seventwentyseven.tk/score/{{ record['std-rx']['id'] }}/rx" class="stat-mode-scorelink">Relax Taiko Record</a>
+          <i class="mode-icon mode-taiko"></i> <a href="https://zbancho.ml/score/{{ record['std-rx']['id'] }}/rx" class="stat-mode-scorelink">Relax Taiko Record</a>
         </div>
         <div class="stat-avatar-pp">
-          <img src="https://a.seventwentyseven.tk/{{ record['taiko-rx']['userid'] }}" class="stat-avatar-img" onError="this.src='/static/images/avatar_notwork.png';"><span> {{ record['taiko-rx']['pp'] }}  <strong>PP</strong></span>
+          <img src="https://a.zbancho.ml/{{ record['taiko-rx']['userid'] }}" class="stat-avatar-img" onError="this.src='/static/images/avatar_notwork.png';"><span> {{ record['taiko-rx']['pp'] }}  <strong>PP</strong></span>
         </div>
         <div class="stat-user">
-          <span>Played by <a href="https://seventwentyseven.tk/u/{{ record['taiko-rx']['userid'] }}" style="font-weight: 500 !important;">{{ record['taiko-rx']['name'] }}</a></span>
+          <span>Zagrane przez <a href="https://zbancho.ml/u/{{ record['taiko-rx']['userid'] }}" style="font-weight: 500 !important;">{{ record['taiko-rx']['name'] }}</a></span>
         </div>
       </div>
     </div>
     <div class="pp-catch-vn">
       <div class="stat-block" style="background: linear-gradient(hsl(var(--main), 15%, 15%, 0.8), hsl(var(--main), 15%, 15%, 0.8)), url(https://assets.ppy.sh/beatmaps/{{ record['catch-vn']['set_id'] }}/covers/card.jpg); background-size: cover; background-position-x: 50%;">
         <div class="stat-mode-name">
-          <i class="mode-icon mode-catch"></i> <a href="https://seventwentyseven.tk/score/{{ record['catch-vn']['id'] }}/vn" class="stat-mode-scorelink">Vanilla Catch Record</a>
+          <i class="mode-icon mode-catch"></i> <a href="https://zbancho.ml/score/{{ record['catch-vn']['id'] }}/vn" class="stat-mode-scorelink">Vanilla Catch Record</a>
         </div>
         <div class="stat-avatar-pp">
-          <img src="https://a.seventwentyseven.tk/{{ record['catch-vn']['userid'] }}" class="stat-avatar-img" onError="this.src='/static/images/avatar_notwork.png';"><span> {{ record['catch-vn']['pp'] }}  <strong>PP</strong></span>
+          <img src="https://a.zbancho.ml/{{ record['catch-vn']['userid'] }}" class="stat-avatar-img" onError="this.src='/static/images/avatar_notwork.png';"><span> {{ record['catch-vn']['pp'] }}  <strong>PP</strong></span>
         </div>
         <div class="stat-user">
-          <span>Played by <a href="https://seventwentyseven.tk/u/{{ record['catch-vn']['userid'] }}" style="font-weight: 500 !important;">{{ record['catch-vn']['name'] }}</a></span>
+          <span>Zagrane przez <a href="https://zbancho.ml/u/{{ record['catch-vn']['userid'] }}" style="font-weight: 500 !important;">{{ record['catch-vn']['name'] }}</a></span>
         </div>
       </div>
     </div>
     <div class="pp-catch-rx">
       <div class="stat-block" style="background: linear-gradient(hsl(var(--main), 15%, 15%, 0.8), hsl(var(--main), 15%, 15%, 0.8)), url(https://assets.ppy.sh/beatmaps/{{ record['catch-rx']['set_id'] }}/covers/card.jpg); background-size: cover; background-position-x: 50%;">
         <div class="stat-mode-name">
-          <i class="mode-icon mode-catch"></i> <a href="https://seventwentyseven.tk/score/{{ record['catch-rx']['id'] }}/rx" class="stat-mode-scorelink">Relax Catch Record</a>
+          <i class="mode-icon mode-catch"></i> <a href="https://zbancho.ml/score/{{ record['catch-rx']['id'] }}/rx" class="stat-mode-scorelink">Relax Catch Record</a>
         </div>
         <div class="stat-avatar-pp">
-          <img src="https://a.seventwentyseven.tk/{{ record['catch-rx']['userid'] }}" class="stat-avatar-img" onError="this.src='/static/images/avatar_notwork.png';"><span> {{ record['catch-rx']['pp'] }}  <strong>PP</strong></span>
+          <img src="https://a.zbancho.ml/{{ record['catch-rx']['userid'] }}" class="stat-avatar-img" onError="this.src='/static/images/avatar_notwork.png';"><span> {{ record['catch-rx']['pp'] }}  <strong>PP</strong></span>
         </div>
         <div class="stat-user">
-          <span>Played by <a href="https://seventwentyseven.tk/u/{{ record['catch-rx']['userid'] }}" style="font-weight: 500 !important;">{{ record['catch-rx']['name'] }}</a></span>
+          <span>Zagrane przez <a href="https://zbancho.ml/u/{{ record['catch-rx']['userid'] }}" style="font-weight: 500 !important;">{{ record['catch-rx']['name'] }}</a></span>
         </div>
       </div>
     </div>
     <div class="pp-mania-vn">
       <div class="stat-block" style="background: linear-gradient(hsl(var(--main), 15%, 15%, 0.8), hsl(var(--main), 15%, 15%, 0.8)), url(https://assets.ppy.sh/beatmaps/{{ record['mania-vn']['set_id'] }}/covers/card.jpg); background-size: cover; background-position-x: 50%;">
         <div class="stat-mode-name">
-          <i class="mode-icon mode-mania"></i> <a href="https://seventwentyseven.tk/score/{{ record['mania-vn']['id'] }}/vn" class="stat-mode-scorelink">Vanilla Mania Record</a>
+          <i class="mode-icon mode-mania"></i> <a href="https://zbancho.ml/score/{{ record['mania-vn']['id'] }}/vn" class="stat-mode-scorelink">Vanilla Mania Record</a>
         </div>
         <div class="stat-avatar-pp">
-          <img src="https://a.seventwentyseven.tk/{{ record['mania-vn']['userid'] }}" class="stat-avatar-img" onError="this.src='/static/images/avatar_notwork.png';"><span> {{ record['mania-vn']['pp'] }}  <strong>PP</strong></span>
+          <img src="https://a.zbancho.ml/{{ record['mania-vn']['userid'] }}" class="stat-avatar-img" onError="this.src='/static/images/avatar_notwork.png';"><span> {{ record['mania-vn']['pp'] }}  <strong>PP</strong></span>
         </div>
         <div class="stat-user">
-          <span>Played by <a href="https://seventwentyseven.tk/u/{{ record['mania-vn']['userid'] }}" style="font-weight: 500 !important;">{{ record['mania-vn']['name'] }}</a></span>
+          <span>Zagrane przez <a href="https://zbancho.ml/u/{{ record['mania-vn']['userid'] }}" style="font-weight: 500 !important;">{{ record['mania-vn']['name'] }}</a></span>
         </div>
       </div>
     </div>
     <!-- Latest Users -->
     <div class="latest-users">
       <div class="latest-users-header">
-        <span><i class="fas fa-users" style="margin-right: 5px;"></i>Recent Users</span>
+        <span><i class="fas fa-users" style="margin-right: 5px;"></i>Ostatni użytkownicy</span>
       </div>
       {% for el in latest_users %}
         {{ l_usr_card(el['id'], el['name'], el['country'], el['time_ago'])}}
@@ -274,12 +263,10 @@
 <section class="hero splash">
   <div class="hero-body">
     <div class="container has-text-centered">
-      <h1 class="title is-spaced">What are you waiting for?</h1>
-      <h2 class="subtitle">Join {{ appName() }}! It's risk-free! You won't get your account banned on official servers
-        if
-        you play here with us! And don't worry, as you can always switch between the official servers and us at any time!</h2>
-      <div class="buttons is-centered"><a class="control button is-primary" href="/register">Sign up for free</a><a
-          class="control button is-light" href="/login">Login</a></div>
+      <h1 class="title is-spaced">Na co ty czekasz ja tomasz hajto cie potrąci?</h1>
+      <h2 class="subtitle">Dołącz do nas tu nie ma ryzyka że dostaniesz bana w każdej chwili możesz zrezygnować</h2>
+      <div class="buttons is-centered"><a class="control button is-primary" href="/register">Zarejestruj się za darmo</a><a
+          class="control button is-light" href="/login">Zaloguj się</a></div>
     </div>
   </div>
 </section>
