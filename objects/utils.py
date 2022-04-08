@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING
 
 from cmyui.logging import Ansi
 from cmyui.logging import log
-import datetime
 from pathlib import Path
 from quart import render_template
 from quart import session
@@ -14,7 +13,7 @@ from objects import glob
 from objects import utils
 
 if TYPE_CHECKING:
-    from PIL import Image
+    from PIL.Image import Image
 
 async def flash(status: str, msg: str, template: str) -> str:
     """Flashes a success/error message on a specified template."""
@@ -85,12 +84,12 @@ async def validate_captcha(data: str) -> bool:
     """Verify `data` with hcaptcha's API."""
     url = f'https://hcaptcha.com/siteverify'
 
-    data = {
+    request_data = {
         'secret': glob.config.hCaptcha_secret,
         'response': data
     }
 
-    async with glob.http.post(url, data=data) as resp:
+    async with glob.http.post(url, data=request_data) as resp:
         if not resp or resp.status != 200:
             if glob.config.debug:
                 log('Failed to verify captcha: request failed.', Ansi.LRED)
@@ -104,9 +103,9 @@ def get_required_score_for_level(level: int) -> float:
 	if level <= 100:
 		if level >= 2:
 			return 5000 / 3 * (4 * (level ** 3) - 3 * (level ** 2) - level) + 1.25 * (1.8 ** (level - 60))
-		elif level <= 0 or level == 1:
+		else:
 			return 1.0  # Should be 0, but we get division by 0 below so set to 1
-	elif level >= 101:
+	else:
 		return 26931190829 + 1e11 * (level - 100)
 
 def get_level(totalScore: int) -> int:
@@ -135,12 +134,16 @@ def has_profile_customizations(user_id: int = 0) -> dict[str, bool]:
         path = BANNERS_PATH / f'{user_id}.{ext}'
         if has_custom_banner := path.exists():
             break
+    else:
+        has_custom_banner = False
 
     # check for custom background image file
     for ext in ('jpg', 'jpeg', 'png', 'gif'):
         path = BACKGROUND_PATH / f'{user_id}.{ext}'
         if has_custom_background := path.exists():
             break
+    else:
+        has_custom_background = False
 
     return {
         'banner' : has_custom_banner,
@@ -160,34 +163,3 @@ def crop_image(image: 'Image') -> 'Image':
         image = image.crop([0, offset, width, height-offset])
 
     return image
-
-def determine_plural(number:int):
-    if int(number) != 1:
-        return 's'
-    else:
-        return ''
-
-def time_ago(time1, time2, time_limit:int=0):
-    """Calculate time ago between two dates"""
-    time_diff = time1 - time2
-    timeago = datetime.datetime(1,1,1) + time_diff
-    time_limit = time_limit
-    time_ago = ""
-    if timeago.year-1 != 0:
-        time_ago += "{} Year{} ".format(timeago.year-1, determine_plural(timeago.year-1))
-        time_limit = time_limit + 1
-    if timeago.month-1 !=0:
-        time_ago += "{} Month{} ".format(timeago.month-1, determine_plural(timeago.month-1))
-        time_limit = time_limit + 1
-    if timeago.day-1 !=0 and not time_limit == 2:
-        time_ago += "{} Day{} ".format(timeago.day-1, determine_plural(timeago.day-1))
-        time_limit = time_limit + 1
-    if timeago.hour != 0 and not time_limit == 2:
-        time_ago += "{} Hour{} ".format(timeago.hour, determine_plural(timeago.hour))
-        time_limit = time_limit + 1
-    if timeago.minute != 0 and not time_limit == 2:
-        time_ago += "{} Minute{} ".format(timeago.minute, determine_plural(timeago.minute))
-        time_limit = time_limit + 1
-    if not time_limit == 2:
-        time_ago += "{} Second{} ".format(timeago.second, determine_plural(timeago.second))
-    return time_ago
